@@ -1,52 +1,38 @@
 import React from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix for default marker icon
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
 const CampusMap = () => {
   // Sharda University coordinates
-  const center = {
-    lat: 28.4322,
-    lng: 77.5000
-  };
-
-  const mapStyles = {
-    height: "400px",
-    width: "100%",
-    borderRadius: "0.75rem"
-  };
+  const center = [28.4322, 77.5000];
 
   return (
-    <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-      <GoogleMap
-        mapContainerStyle={mapStyles}
-        zoom={15}
-        center={center}
-        options={{
-          styles: [
-            {
-              featureType: "all",
-              elementType: "geometry",
-              stylers: [{ color: "#f5f5f5" }]
-            },
-            {
-              featureType: "water",
-              elementType: "geometry",
-              stylers: [{ color: "#e9e9e9" }]
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#9e9e9e" }]
-            }
-          ]
-        }}
-      >
-        <Marker
-          position={center}
-          title="Sharda University"
-          animation={window.google.maps.Animation.DROP}
-        />
-      </GoogleMap>
-    </LoadScript>
+    <MapContainer
+      center={center}
+      zoom={15}
+      style={{ height: "400px", width: "100%", borderRadius: "0.75rem" }}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={center}>
+        <Popup>
+          Sharda University<br />
+          Plot No. 32-34, Knowledge Park III,<br />
+          Greater Noida, Uttar Pradesh 201310
+        </Popup>
+      </Marker>
+    </MapContainer>
   );
 };
 
